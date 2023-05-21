@@ -1,0 +1,50 @@
+﻿@page "/fetchdata"
+@using MoviesAPI.Contracts;
+@using MoviesApi.Client;
+
+
+@inject HttpClient Http
+@inject MovieApiClient movieApiClient
+
+
+<PageTitle>Movies</PageTitle>
+
+<h1>Movies</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (movieDetails == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Genre</th>
+                <th>Year Released</th>               
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var movie in movieDetails)
+            {
+                <tr>
+                    <td>@movie.Name</td>
+                    <td>@movie.Genre</td>
+                    <td>@movie.YearReleased</td>
+                 </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<MovieDetails> movieDetails;
+
+    protected override async Task OnInitializedAsync()
+    {
+        movieDetails = await movieApiClient.Movies.GetMoviesAsync();
+    }
+}
